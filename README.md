@@ -4,8 +4,8 @@
 This project allows to create a raspberry pi robot controlled by an android application, over bluetooth.
 This robot can gives information on weather (temperature, pression, humidity), and is a also a camera surveillance 
 
-It can also be transformed into a [Retropi](https://retropie.org.uk/) console:
-- You just need to replace its SD card with a Retropie one, and connect joysticks.
+
+It can also be transformed into a [Retropi](https://retropie.org.uk/) console. You just need to replace its SD card with a Retropie one, and connect joysticks.
 
 <img src="piroman-bomberman.jpg" alt="Image" style="width: 300px;"/>.
 
@@ -20,28 +20,19 @@ You need to have
 - a raspberry compatible [Wifi Dongle](https://www.amazon.fr/gp/product/B003MTTJOY)
 
 
-To build the body, the head, the arms of your robots, you can use Cardboard, or balsa, on thin woods.
+To build the body, the head, the arms of your robots, you can use cardboard, or balsa, on thin woods.
 
 
 On your raspberry, you need to :
+- [Install latest Raspbian OS](https://www.raspberrypi.org/downloads/raspbian/)
 - [Configure Wifi](http://weworkweplay.com/play/automatically-connect-a-raspberry-pi-to-a-wifi-network/)
 - [enable SSH](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md) on your Raspberry pi.
  
 *Tips:
-To enable SSH and auto configure Wifi when writing raspbian OS onto SD card, add an empty file named `ssh` and a [wpa_suppliant.conf](./conf/wpa_suppliant.conf)*
+To enable SSH and auto configure Wifi when writing raspbian OS onto SD card, add an empty file named `ssh` and a wpa_suppliant.conf (cf [Raspbian Stretch Headless Setup Procedure](https://www.raspberrypi.org/forums/viewtopic.php?t=191252))
 
 ## Pyroman : Python scripts on Piroman
 
 Connect, via SSH, to your raspberry pi and [configure a shared folder](https://raspberrypihq.com/how-to-share-a-folder-with-a-windows-computer-from-a-raspberry-pi/) `pyroman`.
-
-You can share a folder by adding these lines into `/etc/samba/smb.conf`
-```
-[pyroman]
- 	comment = Pyroman Shared Folder
- 	path = /home/pi/pyroman
-	browsable = yes
-	guest ok = yes
-	writable = yes
-```
 
 With your file explorer go into \\RASPBERRYPI\pyroman. Copy all files from [Pyroman](./Pyroman) onto this shared folder
