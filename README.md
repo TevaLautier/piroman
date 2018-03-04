@@ -1,7 +1,7 @@
 # piroman
-Raspberry **Pi** **ro**bot for Weather and Video Surveillance ![Image](./piroman.jpg =100x20)
+Raspberry **Pi** **ro**bot for Weather and Video Surveillance ![Image](https://github.com/TevaLautier/piroman/blob/master/piroman.jpg =100x20)
 ====================================
-
+<img src="piroman.jpg" alt="Image" style="width: 200px;"/>
 This project allows to create a raspberry pi robot controlled by an android application, over bluetooth.
 This robot can gives information on weather (temperature, pression, humidity), and is a also a camera surveillance 
 
