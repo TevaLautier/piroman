@@ -9,9 +9,12 @@ Prerequisites
 -------------------
 
 You need to have
-- a Raspberry pi 3, with its alimentation
-- The `OSOYOO starter kit <https://www.amazon.fr/OSOYOO-Raspberry-Electronique-explorateurs-amateurs/dp/B074YZMRC1>`_
-- A `night vision camera module <https://www.amazon.fr/gp/product/B071J14338>`_ 
+- A Raspberry pi 3, with its alimentation
+- The [OSOYOO starter kit] (https://www.amazon.fr/OSOYOO-Raspberry-Electronique-explorateurs-amateurs/dp/B074YZMRC1>)
+- A [night vision camera module] (https://www.amazon.fr/gp/product/B071J14338>)
+-- with a longer cable : [30cm](https://www.amazon.fr/gp/product/B01NAXKTDP)  or [20cm](https://www.amazon.fr/gp/product/B00RMV2L0M)
+
+To build the body, the head, the arms of your robots, you can use Cardboard, or balsa, on thin wood.
 
 ```
 function test() {
