@@ -1,0 +1,63 @@
+[{ 
+	"name": "eee",
+	"steps": [
+			"left:up:90", 
+			"right:up:90"
+	]
+},{ 
+	"name": "ZZZ",
+	"steps": [
+			"left:up:90",
+			"right:up:90",
+			"lcd:0:  ! Coucou ! ",
+			"lcd:1:   ",
+
+			"left:down:10",
+			"right:down:10",
+			"lcd:0:   ",
+			"lcd:1:  ! Coucou ! ",
+
+			"left:up:10",
+			"right:up:10",
+			"lcd:0:  ! Coucou ! ",
+			"lcd:1:   ",
+			
+			"left:down:10",
+			"right:down:10",
+			"lcd:0:   ",
+			"lcd:1:  ! Coucou ! ",
+
+			"left:up:10",
+			"right:up:10",
+			"lcd:0:  ! Coucou ! ",
+			"lcd:1:   ",
+			
+			"left:down:10",
+			"right:down:10",
+			"lcd:0:   ",
+			"lcd:1:  ! Coucou ! ",
+
+			"left:up:10",
+			"right:up:10",
+			"lcd:0:  ! Coucou ! ",
+			"lcd:1:   ",
+			
+
+			"left:set:200",
+			"right:set:160",
+			"lcd:0:  ! Coucou ! ",
+			"lcd:1:   ",
+
+
+			"left:down:10",
+			"right:down:10",
+			"lcd:0:   ",
+			"lcd:1:  ! Coucou ! ",
+
+			"left:up:10",
+			"right:up:10",
+			"lcd:0:  ! Coucou ! ",
+			"lcd:1:   "
+	]
+}
+]

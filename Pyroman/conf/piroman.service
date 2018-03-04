@@ -1,0 +1,13 @@
+[Unit]
+Description=Piroman Bluetooth Server
+After=bluetooth.target
+ 
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/home/pi/pyroman
+ExecStart=/usr/bin/python /home/pi/pyroman/piromanbth.py -l /home/pi/pyroman/log/piroman.log
+ 
+[Install]
+WantedBy=multi-user.target
