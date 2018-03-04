@@ -32,6 +32,16 @@ To enable SSH and auto configure Wifi when writing raspbian OS onto SD card, add
 
 ## Pyroman : Python scripts on Piroman
 
-Connect, via SSH, to your raspberry pi and configure a shared folder `pyroman`
+Connect, via SSH, to your raspberry pi and [configure a shared folder](https://raspberrypihq.com/how-to-share-a-folder-with-a-windows-computer-from-a-raspberry-pi/) `pyroman`.
+
+You can share a folder by adding these lines into `/etc/samba/smb.conf`
+```
+[pyroman]
+ 	comment = Pyroman Shared Folder
+ 	path = /home/pi/pyroman
+	browsable = yes
+	guest ok = yes
+	writable = yes
+```
 
 With your file explorer go into \\RASPBERRYPI\pyroman. Copy all files from [Pyroman](./Pyroman) onto this shared folder
