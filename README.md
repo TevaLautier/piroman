@@ -1,16 +1,15 @@
-# piroman
-Raspberry **Pi** **ro**bot for Weather and Video Surveillance ![Image](https://github.com/TevaLautier/piroman/blob/master/piroman.jpg =100x20)
-====================================
-<img src="piroman.jpg" alt="Image" style="width: 200px;"/>
+# Piroman : Raspberry **Pi** **ro**bot for Weather and Video Surveillance 
+
+<img src="piroman.jpg" alt="Image" style="width: 100px;"/>
 This project allows to create a raspberry pi robot controlled by an android application, over bluetooth.
 This robot can gives information on weather (temperature, pression, humidity), and is a also a camera surveillance 
 
-It can also be transformed into a [Retropi](https://retropie.org.uk/) console. [Image](./piroman-bomberman.jpg =100x).
+It can also be transformed into a [Retropi](https://retropie.org.uk/) console. 
+<img src="piroman-bomberman.jpg" alt="Image" style="width: 100px;"/>.
 You just need to replace its SD card with a Retropie one, and connect joysticks.
 
 
-Prerequisites
--------------------
+## Prerequisites
 
 You need to have
 - A Raspberry pi 3, with its alimentation
@@ -20,10 +19,3 @@ You need to have
 
 To build the body, the head, the arms of your robots, you can use Cardboard, or balsa, on thin woods.
 
-
-
-```
-function test() {
-  console.log("notice the blank line before this function?");
-}
-```
