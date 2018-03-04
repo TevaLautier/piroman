@@ -67,7 +67,7 @@ And add lines at the end:
 ```
 ### Change computer name
 
-Edit you /etc/hosts to change the computer name:
+Edit `/etc/hosts` to change the computer name:
 ```
 sudo nano /etc/hosts
 ```
@@ -75,7 +75,7 @@ And replace `127.0.1.1 raspberrypi` with `127.0.1.1 piroman`
 
 ### Configure bluetooth
 
-We need to install bluetooth (cf [Tutorial](https://circuitdigest.com/microcontroller-projects/controlling-raspberry-pi-gpio-using-android-app-over-bluetooth)
+We need to install bluetooth (cf [Tutorial](https://circuitdigest.com/microcontroller-projects/controlling-raspberry-pi-gpio-using-android-app-over-bluetooth))
 ```
 sudo apt-get install bluetooth blueman bluez
 sudo reboot
@@ -111,12 +111,11 @@ Motion is a tool to detect motion with camera. We need to [install it](https://r
 sudo apt-get install motion
 ```
 
-To enable motion to work with raspberry camera, yu need to execute :
+To enable motion to work with raspberry camera, you need to execute :
 ```
 sudo modprobe bcm2835-v4l2
 echo "bcm2835-v4l2" | sudo tee -a /etc/modules
 ```
-
 
 Edit file `/etc/default/motion` to enable motion as a daemon
 ```
@@ -124,12 +123,15 @@ start_motion_daemon=yes
 ```
 Edit `/etc/motion/motion.conf` to change these lines, or use the provided [motion.conf](./conf/motion.conf)
 ```
+# Start in daemon (background) mode and release terminal (default: off)
 daemon on
 
+# Use a file to save logs messages, if not defined stderr and syslog is used. (default: not defined)
 logfile /home/pi/pyroman/log/motion.log
 
-width 640
-height 360
+# Image width (pixels). Valid range: Camera dependent, default: 352
+width 320
+height 240
 
 pre_capture 2
 post_capture 2
@@ -155,6 +157,13 @@ on_movie_start  /home/pi/pyroman/event/onMovieStart.sh
 
 ```
 
+We also need to activate camera on Pi
+```
+sudo raspi-config
+```
+Go into `Interfacing Options->Camera` and enable it
+
+
 To allow motion to write log, videos, images, we need to add user motion to pi group, and change some file rights
 ```
 sudo adduser motion pi
@@ -163,24 +172,24 @@ mkdir camera
 chmod -R g+rw ~/pyroman/camera
 ```
 
-We also need to activate camera on Pi
-```
-sudo raspi-config
-```
-Go into `Interfacing Options->Camera` and enable it
-
 Restart  motion
 ```
 sudo service motion restart
 ```
 To verify if motion works fine, go to [http://piroman:8081](http://piroman:8081)
 
-
+If you move in front of camera, you should have  AVI and JPG file generated in ~/python/camera
 
 ### Add Pyroman scripts
 
 With your file explorer go into \\piroman\pyroman. Copy all files from [Pyroman/script](./Pyroman/script) onto this shared folder
 
+
+We also need to activate I2C on Pi
+```
+sudo raspi-config
+```
+Go into `Interfacing Options->I2C` and enable it
 
 
 

@@ -1,10 +1,11 @@
 import smbus
-import time
-import lcd
 import sys
-from lib import import dht11
 import RPi.GPIO as GPIO
 import struct
+
+from time import *
+from lib import lcd
+from lib import dht11
 from lib import stepper
 from lib import BMP180
 from lib import meteo
@@ -16,20 +17,21 @@ class Robot:
     GPIO.setmode(GPIO.BCM)
     self.lcd=lcd
     lcd.lcd_init();
-    self.gauche = Motor([6,13,19,26])
+    self.gauche = stepper.Motor([6,13,19,26])
     self.gauche.rpm = Robot.RPM
+    self.gauche.sens = -1
     self.gauche.mode = 3
 
-    self.droite = Motor([12,16,20,21])
+    self.droite = stepper.Motor([12,16,20,21])
     self.droite.rpm = Robot.RPM
-    self.droite.sens = -1
+    self.droite.sens = 1
     self.droite.mode = 3
 
-    self.tete = Motor([4,17,27,22])
+    self.tete = stepper.Motor([4,17,27,22])
     self.tete.rpm = Robot.RPM
     self.tete.mode = 3
 
-    self.meteo=Meteo()
+    self.meteo=meteo.Meteo()
 
   def start(self):
     print "Start PiRoMan"
@@ -52,16 +54,18 @@ class Robot:
     self.gauche.stop()
     self.droite.stop()
     self.tete.stop()
+  
   def main(self):
+      print("Use python pyroman.py start|stop|test")
+  
+  def test(self):
     print("Start PiRoMan sample")
-    #self.lcd.main()
-
+    
     self.temp = self.meteo.read_temperature()
     self.temp2 = self.meteo.read_temperature2()
     self.pressure = self.meteo.read_pressure()
     self.altitude = self.meteo.read_altitude()
-    self.humidity = 0.0
-    #self.meteo.read_humidity()
+    self.humidity = self.meteo.read_humidity()
     self.droite.setAngle(90)
     self.gauche.setAngle(120)
     for i in range(10):
@@ -75,20 +79,7 @@ class Robot:
         self.gauche.setAngle(120)
     self.droite.setAngle(90)
     self.gauche.setAngle(120)
-    for i in range(10):
-        self.droite.setAngle(110)
-        self.droite.setAngle(120)
-        self.gauche.setAngle(80)
-        self.gauche.setAngle(90)
-    self.droite.setAngle(30)
-    self.gauche.setAngle(180)
-    for i in range(10):
-        self.droite.setAngle(40)
-        self.droite.setAngle(30)
-        self.gauche.setAngle(160)
-        self.gauche.setAngle(180)
     
-    self.gauche.setAngle(80)
     
     for i in range(2):
         sleep(1)
@@ -103,12 +94,13 @@ class Robot:
     self.lcd.line(2,"%.2f hPa" % (self.pressure / 100.0))
     
     
-    
+    sleep(10)
+    self.lcd.stopBackLight()
 
 
 
 if __name__ == '__main__':
-
+  GPIO.setwarnings(False)  
   robot=Robot()
   try:
     #print("arg="+str(len(sys.argv))+":"+sys.argv[1]+" "+sys.argv[0]+" :"+str(sys.argv[1]=="stop"))
@@ -116,8 +108,9 @@ if __name__ == '__main__':
       if sys.argv[1]=="start":
         robot.start()
       if sys.argv[1]=="stop":
-        print "dddd"
         robot.stopAll()
+      if sys.argv[1]=="test":
+        robot.test()
     if len(sys.argv)==1:
       robot.main()
   except KeyboardInterrupt:

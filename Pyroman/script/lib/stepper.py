@@ -79,10 +79,8 @@ class Motor(object):
         steps = (steps % self.steps_per_rev)
         if steps > self.steps_per_rev / 2:
             steps -= self.steps_per_rev
-            print("moving " + str(steps) + " steps")
             self.move_acw(-steps)
         else:
-            print ("moving " + str(steps) + " steps")
             self.move_cw(steps)
         self.step_angle = target_step_angle
 

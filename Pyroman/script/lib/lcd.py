@@ -45,7 +45,7 @@ def lcd_init():
   time.sleep(E_DELAY)
 
 def stop():
-  print "dssdds"
+  print "lcd stop"
   
 def stopBackLight():
   lcd_byte(0x01, LCD_CMD)
