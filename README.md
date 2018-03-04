@@ -1,5 +1,5 @@
 # piroman
-Raspberry robot for Weather and Video Surveillance ![Image](https://github.com/TevaLautier/piroman/blob/master/piroman.jpg)
+Raspberry **Pi** **ro**bot for Weather and Video Surveillance ![Image](https://github.com/TevaLautier/piroman/blob/master/piroman.jpg)
 ====================================
 
 This project allows to create a raspberry pi robot controlled by an android application, over bluetooth.
