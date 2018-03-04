@@ -10,7 +10,8 @@ Prerequisites
 
 You need to have
 - a Raspberry pi 3, with its alimentation
-- The `OSOYOO starter kit <https://www.amazon.fr/OSOYOO-Raspberry-Electronique-explorateurs-amateurs/dp/B074YZMRC1>`
+- The `OSOYOO starter kit <https://www.amazon.fr/OSOYOO-Raspberry-Electronique-explorateurs-amateurs/dp/B074YZMRC1>`_
+- A `night vision camera module <https://www.amazon.fr/gp/product/B071J14338>`_ 
 
 ```
 function test() {
