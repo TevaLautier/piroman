@@ -99,10 +99,21 @@ To rename the bluetooth device name, create file `/etc/machine-info` and put ins
 PRETTY_HOSTNAME=device-name
 ```
 
-Restart your raspberry:
+We will need to add access to bluetooth for user pi
 ```
-sudo reboot
+sudo adduser pi bluetooth
 ```
+Also, edit file `/lib/systemd/system/bluetooth.service` and add `-C` at the end of this line:
+```
+ExecStart=/usr/lib/bluetooth/bluetoothd -C
+```
+Then restart bluetooth:
+```
+sudo systemctl daemon-reload
+sudo systemctl restart bluetooth
+```
+
+
 
 ### Motion
 
