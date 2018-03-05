@@ -17,7 +17,9 @@ It can also be transformed into a [Retropi](https://retropie.org.uk/) console. Y
 
    * [Piroman](#piroman)
       * [Prerequisites](#prerequisites)
-      * [GPIO configuration](#gpio-configuration)
+      * [GPIO](#gpio)
+         * [Configuration](#configuration)
+         * [Assembly](#assembly)
       * [Pyroman](#pyroman)
          * [Configure shared folder](#configure-shared-folder)
          * [Change computer name](#change-computer-name)
@@ -25,7 +27,9 @@ It can also be transformed into a [Retropi](https://retropie.org.uk/) console. Y
          * [Install and configure Motion](#install-and-configure-motion)
          * [Add Pyroman scripts](#add-pyroman-scripts)
          * [Launch Pyroman server](#launch-pyroman-server)
+         * [Install Piroman as a service](#install-piroman-as-a-service)
       * [Piroid](#piroid)
+      * [Debug](#debug)
       * [References](#references)
 
 
@@ -57,9 +61,19 @@ sudo apt-get upgrade
 To enable SSH and auto configure Wifi, write raspbian OS image onto your SD card, and in `boot` disk,  
 add an empty file named `ssh` and a file `wpa_suppliant.conf` (cf [Raspbian Stretch Headless Setup Procedure](https://www.raspberrypi.org/forums/viewtopic.php?t=191252))
 
-## GPIO configuration
+## GPIO
 
 I follow needed tutorials on [Osoyoo Raspberry Pi Starter Ki tutorials](http://osoyoo.com/2017/07/13/raspberry-pi-3-starter-learning-kit-introduction/).
+
+### Configuration
+
+We need to activate I2C on our Pi
+```
+sudo raspi-config
+```
+Go into `Interfacing Options->I2C` and enable it
+
+### Assembly
 
 Here is the electronic assembly :
 
@@ -229,24 +243,34 @@ If you move in front of camera, you should have  AVI and JPG file generated in `
 
 TODO 
 
-With your file explorer go into \\piroman\pyroman. Copy all files from [Pyroman/script](./Pyroman/script) onto this shared folder
+With your file explorer, go into \\piroman\pyroman. Copy all files from [Pyroman/script](./Pyroman/script) onto this shared folder.
 
 
-We also need to activate I2C on Pi
-```
-sudo raspi-config
-```
-Go into `Interfacing Options->I2C` and enable it
 
 ### Launch Pyroman server
 
-You can launch pyroman server by using 
+You can launch pyroman server by using :
 ```
 sudo python pyroman-server.py
 ```
-To install it as a service :
+You can test your android application now, if you already have it. But we need piroman server to be launched at startup. For that we need to add a service.
 
-TODO
+### Install Piroman as a service
+
+To [install it as a service](http://www.diegoacuna.me/how-to-run-a-script-as-a-service-in-raspberry-pi-raspbian-jessie/), copy [piroman.service](./conf/piroman.service) into your home folder, and run command :
+```
+sudo cp ~/piroman.service /lib/systemd/system
+sudo chmod 644 /lib/systemd/system/piroman.service
+chmod +x /home/pi/pyroman/pyroman-server.py
+sudo systemctl daemon-reload
+sudo systemctl enable piroman.service
+sudo systemctl start piroman.service
+```
+You can check the log in `~/pyroman/log/piroman.service`. If there is none, check the status of piroman service:
+```
+sudo systemctl status piroman.service
+```
+
 
 ## Piroid
 
@@ -257,5 +281,19 @@ Open the [project](./Piroid) in Android studio project, and simply launch it.
 
 You need to connect a remote device (your phone) to be able to use bluetooth.
 
+
+## Debug
+
+To debug the piroman service, use
+```
+sudo systemctl status piroman.service
+```
+Or if you are editing piroman.service:
+```
+sudo cp piroman.service /lib/systemd/system &&  sudo systemctl daemon-reload &&  sudo systemctl restart piroman.service &&  sudo systemctl status piroman.service
+```
+
 ## References
+
 - Android Linux / Raspberry Pi Bluetooth communication : http://blog.davidvassallo.me/2014/05/11/android-linux-raspberry-pi-bluetooth-communication/
+- How to run a script as a service in Raspberry pi : http://www.diegoacuna.me/how-to-run-a-script-as-a-service-in-raspberry-pi-raspbian-jessie/
