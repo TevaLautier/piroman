@@ -5,8 +5,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -15,12 +13,8 @@ import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.ValueCallback;
-import android.webkit.WebBackForwardList;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,13 +31,18 @@ import piroid.teva.org.piroid.R;
 public class MainActivity extends Activity {
 
     public static final String TAG = "Piroman";
+    public static final String DEVICE_PIROMAN = "piroman";
+    public static final String DEVICE_RASPBERRYPI = "raspberrypi";
     final byte delimiter = 33;
     BluetoothSocket mmSocket;
     BluetoothDevice mmDevice = null;
+    Object monitor = new Object();
     int readBufferPosition = 0;
     // https://stackoverflow.com/questions/42678488/streaming-live-video-from-raspberry-pi-to-my-android-app-but-getting-security-ex
     String vidAddress = "http://192.168.0.14:8081/";
     private WebView webView;
+    private EditText lcd1;
+    private EditText lcd2;
 
 
     @Override
@@ -58,65 +57,72 @@ public class MainActivity extends Activity {
         webView.getSettings().setJavaScriptEnabled(true);
 
 
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-
         // start temp button handler
         int delta = 20;
         final Button leftUp = (Button) findViewById(R.id.leftUp);
-        leftUp.setOnClickListener(new SendMessageClickHandler("left:up:" + delta));
+        ValueCallback<String> callback = null;
+        leftUp.setOnClickListener(new SendMessageClickHandler("left:up:" + delta, callback));
         final Button leftDown = (Button) findViewById(R.id.leftDown);
-        leftDown.setOnClickListener(new SendMessageClickHandler("left:down:" + delta));
+        leftDown.setOnClickListener(new SendMessageClickHandler("left:down:" + delta, callback));
 
         final Button rightUp = (Button) findViewById(R.id.rightUp);
-        rightUp.setOnClickListener(new SendMessageClickHandler("right:up:" + delta));
+        rightUp.setOnClickListener(new SendMessageClickHandler("right:up:" + delta, callback));
         final Button rightDown = (Button) findViewById(R.id.rightDown);
-        rightDown.setOnClickListener(new SendMessageClickHandler("right:down:" + delta));
+        rightDown.setOnClickListener(new SendMessageClickHandler("right:down:" + delta, callback));
 
         final Button headRight = (Button) findViewById(R.id.headRight);
-        headRight.setOnClickListener(new SendMessageClickHandler("head:right:" + delta));
+        headRight.setOnClickListener(new SendMessageClickHandler("head:right:" + delta, callback));
         final Button headLeft = (Button) findViewById(R.id.headLeft);
-        headLeft.setOnClickListener(new SendMessageClickHandler("head:left:" + delta));
+        headLeft.setOnClickListener(new SendMessageClickHandler("head:left:" + delta, callback));
 
 
-        final EditText lcd1 = (EditText) findViewById(R.id.lcd1);
+        lcd1 = (EditText) findViewById(R.id.lcd1);
         lcd1.addTextChangedListener(new LCDTextWatcher(0));
-        lcd1.setOnFocusChangeListener(new LCDFocusChangeListener(0));
-        final EditText lcd2 = (EditText) findViewById(R.id.lcd2);
+        //lcd1.setOnFocusChangeListener(new LCDFocusChangeListener(0));
+        lcd2 = (EditText) findViewById(R.id.lcd2);
         lcd2.addTextChangedListener(new LCDTextWatcher(1));
-        lcd2.setOnFocusChangeListener(new LCDFocusChangeListener(1));
+        //lcd2.setOnFocusChangeListener(new LCDFocusChangeListener(1));
 
 
         //actions
 
-        Button meteo = addAction("Meteo", "action:meteo");
+        Button meteo = addAction("Meteo", "action:meteo", new ReloadDataValueCallback());
 
         //default focus
         meteo.setFocusable(true);
         meteo.setFocusableInTouchMode(true);///add this line
         meteo.requestFocus();
 
-        Button lightOff = addAction("Lumière", "lcd:off");
+        Button lightOff = addAction("Lumière", "lcd:off", null);
 
-        Button coucou = addAction("Coucou", "action:coucou");
+        Button coucou = addAction("Coucou", "action:coucou", new ReloadDataValueCallback());
 
-        Button R2_screaming = addSound("Cri de R2D2", "sound:R2_screaming.wav");
-        Button Chewbacca_Sound_10 = addSound("Chewbacca", "sound:Chewbacca_Sound_10.wav");
+        Button R2_screaming = addSound("Cri de R2D2", "sound:R2_screaming.wav", null);
+        Button Chewbacca_Sound_10 = addSound("Chewbacca", "sound:Chewbacca_Sound_10.wav", null);
 
-/*
-        Button meteo = addAction("Meteo", "action:meteo");
 
-        final Button meteo = (Button) findViewById(R.id.meteo);
-        meteo.setOnClickListener(new SendMessageClickHandler("action:meteo"));
+        initDevice();
 
-        final Button coucou = (Button) findViewById(R.id.coucou);
-        coucou.setOnClickListener(new SendMessageClickHandler("action:coucou"));
 
-        final Button lightOff = (Button) findViewById(R.id.lightOff);
-        lightOff.setOnClickListener(new SendMessageClickHandler("lcd:off"));
-*/
+    }
 
-        // end light off button handler
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mmDevice == null) {
+
+        } else {
+            //https://stackoverflow.com/questions/11430182/android-see-images-of-ip-camera-with-webview-on-android-2-2
+
+            loadVideoUrl();
+            webView.setOnTouchListener(new VideoOnTouchListener());
+            loadLcd();
+            loadSounds();
+        }
+    }
+
+    private void initDevice() {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter != null) {
             if (!mBluetoothAdapter.isEnabled())
 
@@ -131,7 +137,7 @@ public class MainActivity extends Activity {
             {
                 for (BluetoothDevice device : pairedDevices) {
                     Log.i(TAG, "Device " + device.getName());
-                    if (device.getName().equalsIgnoreCase("piroman") || device.getName().equalsIgnoreCase("raspberrypi")) //Note, you will need to change this to match the name of your device
+                    if (device.getName().equalsIgnoreCase(DEVICE_PIROMAN) || device.getName().equalsIgnoreCase(DEVICE_RASPBERRYPI)) //Note, you will need to change this to match the name of your device
                     {
                         Log.i(TAG, "Found bluetoooth device " + device.getName());
                         mmDevice = device;
@@ -140,26 +146,50 @@ public class MainActivity extends Activity {
                 }
             }
         }
-
-        if (mmDevice == null) {
-
-        } else {
-            //https://stackoverflow.com/questions/11430182/android-see-images-of-ip-camera-with-webview-on-android-2-2
-
-            loadVideoUrl();
-            webView.setOnTouchListener(new View.OnTouchListener(){
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    loadVideoUrl();
-                    return true;
-                }
-            });
-            //webView.loadUrl(vidAddress);
-
-        }
     }
 
+    private void loadLcd() {
+        (new Thread(new WorkerThread("lcd:get", new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                final String[] vals = value.split("\n");
+                final String lcd1Msg = vals.length > 0 ? vals[0] : "";
+                final String lcd2Msg = vals.length > 1 ? vals[1] : "";
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        lcd1.setText(lcd1Msg);
+                        lcd2.setText(lcd2Msg);
+                    }
+                });
+
+
+            }
+        }))).start();
+    }
+    private void loadSounds() {
+        (new Thread(new WorkerThread("sound:get", new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                final String[] sounds = value.split("\n");
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final LinearLayout row = (LinearLayout) findViewById(R.id.soundsView);
+                        row.removeAllViews();
+                        for (String sound:sounds) {
+                            String msg=sound.substring(0,sound.indexOf("."));
+                            Button bt= addSound(msg, "sound:"+sound, null);
+                        }
+                    }
+                });
+
+
+            }
+        }))).start();
+    }
     private void loadVideoUrl() {
         (new Thread(new WorkerThread("getcameraurl", new ValueCallback<String>() {
             @Override
@@ -190,19 +220,19 @@ public class MainActivity extends Activity {
     }
 
     @NonNull
-    private Button addAction(String text, String msg) {
+    private Button addAction(String text, String msg, ValueCallback<String> callback) {
         final LinearLayout row = (LinearLayout) findViewById(R.id.actionsView);
-        return addButton(text, msg, row);
+        return addButton(text, msg, row, callback);
     }
 
     @NonNull
-    private Button addSound(String text, String msg) {
+    private Button addSound(String text, String msg, ValueCallback<String> callback) {
         final LinearLayout row = (LinearLayout) findViewById(R.id.soundsView);
-        return addButton(text, msg, row);
+        return addButton(text, msg, row, callback);
     }
 
     @NonNull
-    private Button addButton(String text, String msg, LinearLayout row) {
+    private Button addButton(String text, String msg, LinearLayout row, ValueCallback<String> callback) {
         Button btnTag = new Button(this);
         btnTag.setBackgroundResource(R.drawable.button2);
         btnTag.setTextColor(getResources().getColor(R.color.colorWhite));
@@ -211,7 +241,7 @@ public class MainActivity extends Activity {
         params.setMargins(6, 2, 6, 2);
         btnTag.setLayoutParams(params);
         btnTag.setText(text);
-        btnTag.setOnClickListener(new SendMessageClickHandler(msg));
+        btnTag.setOnClickListener(new SendMessageClickHandler(msg, callback));
         row.addView(btnTag);
         return btnTag;
     }
@@ -220,7 +250,8 @@ public class MainActivity extends Activity {
         // same as in Pyroman/scripts/piroman-server.py >> uuid
         UUID uuid = UUID.fromString("7be1fcb3-5776-42fb-91fd-2ee7b5bbb86d"); //Standard SerialPortService ID
         try {
-            System.out.println("send " + msg2send);
+            initDevice();
+            System.out.println("send " + msg2send + " " + mmDevice);
             mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
             if (!mmSocket.isConnected()) {
                 mmSocket.connect();
@@ -251,9 +282,10 @@ public class MainActivity extends Activity {
         }
 
         public void run() {
-            synchronized (mmDevice) {
-
+            synchronized (monitor) {
+                long deb = System.currentTimeMillis();
                 sendBluetoothMessage(btMsg);
+                System.out.println("timse send " + (System.currentTimeMillis() - deb));
                 //while (!Thread.currentThread().isInterrupted()) {
                 int bytesAvailable;
                 boolean workDone = false;
@@ -267,7 +299,9 @@ public class MainActivity extends Activity {
                     byte[] buffer = new byte[1024];
                     int bytes = mmInputStream.read(buffer);
                     String readMessage = new String(buffer, 0, bytes);
-                    Log.i(TAG,"Send :"+btMsg+" \tReceive "+readMessage);
+                    Log.i(TAG, "Send :" + btMsg + " \tReceive " + readMessage);
+                    if (readMessage.startsWith("msg:"))
+                        readMessage = readMessage.substring(4);
                     if (callback != null)
                         callback.onReceiveValue(readMessage);
 
@@ -276,6 +310,8 @@ public class MainActivity extends Activity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                System.out.println("timse total " + (System.currentTimeMillis() - deb));
+
             }
         }
     }
@@ -284,13 +320,14 @@ public class MainActivity extends Activity {
 
     private class SendMessageClickHandler implements View.OnClickListener {
         private final String msg;
-
-        public SendMessageClickHandler(String msg) {
+        ValueCallback<String> callback;
+        public SendMessageClickHandler(String msg, ValueCallback<String> callback) {
             this.msg = msg;
+            this.callback=callback;
         }
 
         public void onClick(View v) {
-            (new Thread(new WorkerThread(msg))).start();
+            (new Thread(new WorkerThread(msg,callback))).start();
 
         }
     }
@@ -328,6 +365,22 @@ public class MainActivity extends Activity {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             (new Thread(new WorkerThread("line:" + line + ":" + ((EditText) v).getText()))).start();
+        }
+    }
+
+    private class VideoOnTouchListener implements View.OnTouchListener {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            loadVideoUrl();
+            return true;
+        }
+    }
+
+    private class ReloadDataValueCallback implements ValueCallback<String> {
+        @Override
+        public void onReceiveValue(String value) {
+            loadLcd();
         }
     }
 }

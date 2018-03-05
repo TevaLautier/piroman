@@ -34,6 +34,11 @@ E_DELAY = 0.0005
 #bus = smbus.SMBus(0)  # Rev 1 Pi uses 0
 bus = smbus.SMBus(1) # Rev 2 Pi uses 1
 
+# current message
+lcd1Msg=""
+lcd2Msg=""
+
+
 def lcd_init():
   # Initialise display
   lcd_byte(0x33,LCD_CMD) # 110011 Initialise
@@ -93,17 +98,22 @@ def line(nbLine,message):
   line=LCD_LINE_1
   if nbLine==1:
     line=LCD_LINE_2
-  print line
-  print message
   lcd_string(message,line)
 
 def lcd_string(message,line):
   # Send string to display
+  global lcd1Msg;
+  global lcd2Msg;
 
   message = message.ljust(LCD_WIDTH," ")
+  if line==LCD_LINE_1:
+    lcd1Msg=message
+  else:
+    lcd2Msg=message
+  
+  print lcd1Msg+" ::: "+lcd2Msg
 
   lcd_byte(line, LCD_CMD)
-
   for i in range(LCD_WIDTH):
     lcd_byte(ord(message[i]),LCD_CHR)
 

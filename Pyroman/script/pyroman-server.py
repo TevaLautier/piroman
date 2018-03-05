@@ -93,9 +93,16 @@ def handleRequest(data):
             elif data.startswith("sound:"):
                 # sound:R2_screaming.wav
                 args=data.split(":")
-                sound="sound/"+args[1];
-                call(["aplay", "/home/pi/pyroman/"+sound])
-                response = "msg:"+sound+" played"
+                if args[1]=="get":
+                    import os
+                    response=""
+                    for file in os.listdir("./sound"):
+                        if file.endswith(".wav"):
+                            response+=file+"\n";
+                else:
+                    sound="sound/"+args[1];
+                    call(["aplay", "/home/pi/pyroman/"+sound])
+                    response = "msg:"+sound+" played"
 
             elif data.startswith("head:") :
                 #head:left:20
@@ -123,9 +130,13 @@ def handleRequest(data):
                 off="off"==args[1];
                 if off:
                   robot.lcd.stopBackLight();
+                  response="msg:Lcd :"+str(off);
+                elif args[1]=="get":
+                    response="msg:"+robot.lcd.lcd1Msg+"\n"+robot.lcd.lcd2Msg;
                 else:
                     robot.lcd.start();
-                response="msg:Lcd :"+str(off);
+                    response="msg:Lcd :"+str(off);
+                
             elif data.startswith("scenario:"):
                 # scenario:get:Makarena
                 args=data.split(":")
@@ -270,8 +281,6 @@ def main():
             print "Received [%s]" % data
 
             response=handleRequest(data)
-
-            print "sdsdSent back [%s]" % response
 
             client_sock.send(response)
             print "Sent back [%s]" % response
