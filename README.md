@@ -128,7 +128,7 @@ sudo bluetoothctl
 
 To rename the bluetooth device name, create file `/etc/machine-info` and put inside:
 ```
-PRETTY_HOSTNAME=device-name
+PRETTY_HOSTNAME=Piroman
 ```
 
 We will need to add access to bluetooth for user pi
