@@ -15,7 +15,6 @@ It can also be transformed into a [Retropi](https://retropie.org.uk/) console. Y
 
 ## Table of Contents
 
-
    * [Piroman](#piroman)
       * [Prerequisites](#prerequisites)
       * [GPIO configuration](#gpio-configuration)
@@ -25,7 +24,7 @@ It can also be transformed into a [Retropi](https://retropie.org.uk/) console. Y
          * [Configure bluetooth](#configure-bluetooth)
          * [Install and configure Motion](#install-and-configure-motion)
          * [Add Pyroman scripts](#add-pyroman-scripts)
-         * [Pyroman server](#pyroman-server)
+         * [Launch Pyroman server](#launch-pyroman-server)
       * [Piroid](#piroid)
       * [References](#references)
 
@@ -252,8 +251,9 @@ TODO
 ## Piroid
 
 Piroïd is the android application that connect to pyroman-server over bluetooth.
-Open the [project](./Piroid) in Android studio project, and launch it.
+It is not available yet on Play store. 
 
+Open the [project](./Piroid) in Android studio project, and simply launch it.
 
 You need to connect a remote device (your phone) to be able to use bluetooth.
 
