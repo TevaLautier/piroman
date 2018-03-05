@@ -36,6 +36,7 @@ import piroid.teva.org.piroid.R;
 
 public class MainActivity extends Activity {
 
+    public static final String TAG = "Piroman";
     final byte delimiter = 33;
     BluetoothSocket mmSocket;
     BluetoothDevice mmDevice = null;
@@ -129,10 +130,10 @@ public class MainActivity extends Activity {
 
             {
                 for (BluetoothDevice device : pairedDevices) {
-                    Log.i("Piroid", "Device " + device.getName());
+                    Log.i(TAG, "Device " + device.getName());
                     if (device.getName().equalsIgnoreCase("piroman") || device.getName().equalsIgnoreCase("raspberrypi")) //Note, you will need to change this to match the name of your device
                     {
-                        Log.i("PiRoMan", "Found bluetoooth device " + device.getName());
+                        Log.i(TAG, "Found bluetoooth device " + device.getName());
                         mmDevice = device;
                         break;
                     }
@@ -266,7 +267,7 @@ public class MainActivity extends Activity {
                     byte[] buffer = new byte[1024];
                     int bytes = mmInputStream.read(buffer);
                     String readMessage = new String(buffer, 0, bytes);
-
+                    Log.i(TAG,"Send :"+btMsg+" \tReceive "+readMessage);
                     if (callback != null)
                         callback.onReceiveValue(readMessage);
 
