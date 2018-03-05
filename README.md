@@ -16,6 +16,7 @@ It can also be transformed into a [Retropi](https://retropie.org.uk/) console. Y
 ## Table of Contents
 
    * [Piroman](#piroman)
+      * [Table of Contents](#table-of-contents)
       * [Prerequisites](#prerequisites)
       * [GPIO](#gpio)
          * [Configuration](#configuration)
@@ -28,9 +29,11 @@ It can also be transformed into a [Retropi](https://retropie.org.uk/) console. Y
          * [Add Pyroman scripts](#add-pyroman-scripts)
          * [Launch Pyroman server](#launch-pyroman-server)
          * [Install Piroman as a service](#install-piroman-as-a-service)
+         * [Custom sounds](#custom-sounds)
       * [Piroid](#piroid)
       * [Debug](#debug)
       * [References](#references)
+
 
 
 ## Prerequisites
@@ -267,7 +270,9 @@ You can check the log in `~/pyroman/log/piroman.service`. If there is none, chec
 ```
 sudo systemctl status piroman.service
 ```
+### Custom sounds
 
+By default, PiRoman can play any .wav file inside folder `sounds` . You can add your wav files in this folder to see them in Piroid.
 
 ## Piroid
 
