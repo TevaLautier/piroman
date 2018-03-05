@@ -47,7 +47,13 @@ On your raspberry, you need to :
 - [Install latest Raspbian OS](https://www.raspberrypi.org/downloads/raspbian/)
 - [Configure Wifi](http://weworkweplay.com/play/automatically-connect-a-raspberry-pi-to-a-wifi-network/)
 - [enable SSH](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md)
- 
+
+Update and upgrade to have latest version :
+```
+sudo apt-get update
+sudo apt-get upgrade
+```
+
 *Tips:
 To enable SSH and auto configure Wifi, write raspbian OS image onto your SD card, and in `boot` disk,  
 add an empty file named `ssh` and a file `wpa_suppliant.conf` (cf [Raspbian Stretch Headless Setup Procedure](https://www.raspberrypi.org/forums/viewtopic.php?t=191252))
@@ -68,8 +74,6 @@ Connect, via SSH, to your raspberry pi and [configure a shared folder](https://r
 
 ```
 sudo mkdir -m 1777 ~/pyroman
-sudo apt-get update
-sudo apt-get upgrade
 sudo apt-get install samba samba-common-bin
 ```
 
