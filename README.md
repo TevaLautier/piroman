@@ -60,11 +60,13 @@ add an empty file named `ssh` and a file `wpa_suppliant.conf` (cf [Raspbian Stre
 
 ## GPIO configuration
 
-TODO
+I follow needed tutorials on [Osoyoo Raspberry Pi Starter Ki tutorials](http://osoyoo.com/2017/07/13/raspberry-pi-3-starter-learning-kit-introduction/).
+
 Here is the electronic assembly :
 
 <img src="images/gpio.jpg" alt="Image" style="width: 300px;"/>.
 
+TODO
 
 ## Pyroman
 
@@ -207,7 +209,7 @@ sudo raspi-config
 Go into `Interfacing Options->Camera` and enable it
 
 
-To allow motion to write log, videos, images, we need to add user motion to pi group, and change some file rights
+To allow motion to write log, videos, images, we need to add user `motion` to pi `group`, and change some rights
 ```
 sudo adduser motion pi
 mkdir log
@@ -222,7 +224,7 @@ sudo service motion restart
 ```
 To verify if motion works fine, go to [http://piroman:8081](http://piroman:8081)
 
-If you move in front of camera, you should have  AVI and JPG file generated in ~/python/camera
+If you move in front of camera, you should have  AVI and JPG file generated in `~/python/camera`
 
 ### Add Pyroman scripts
 
@@ -251,6 +253,8 @@ TODO
 
 Piroïd is the android application that connect to pyroman-server over bluetooth.
 Open the [project](./Piroid) in Android studio project, and launch it.
+
+
 You need to connect a remote device (your phone) to be able to use bluetooth.
 
 ## References
