@@ -278,6 +278,8 @@ Open the [project](./Piroid) in Android studio project, and simply launch the ma
 
 You need to connect a remote device (your phone) to be able to use bluetooth.
 
+<img src="images/piroid.png" alt="Piroid" style="width: 300px;"/>.
+
 
 ## Debug
 
