@@ -10,10 +10,12 @@ import time
 from bluetooth import *
 from pyroman import Robot
 import codecs
+from subprocess import call
+import socket
 
 
 robot=Robot();
-scenaariFile=fn = os.path.join(os.path.dirname(__file__), 'scenari.json')
+scenaariFile=fn = os.path.join(os.path.dirname(__file__), 'data/scenari.json')
 with codecs.open(scenaariFile,'r',encoding='utf8') as f:
     scenaris = json.loads(f.read())
 
@@ -31,7 +33,7 @@ class LoggerHelper(object):
 
 def setup_logging():
     # Default logging settings
-    LOG_FILE = "/home/pi/shared/log/raspibtsrv.log"
+    LOG_FILE = "/home/pi/pyroman/log/pyroman-server.log"
     LOG_LEVEL = logging.INFO
 
     # Define and parse command line arguments
@@ -85,6 +87,16 @@ def handleRequest(data):
                     bras.setAngle(amount)
 
                 response = "msg:"+leftright+" "+brasN+" Arm Moved "+str(amount)+" "+str(robot.droite==bras)
+            elif data=="getcameraurl":
+                response="msg:http://"+get_ip_address()+":8081/"
+                
+            elif data.startswith("sound:"):
+                # sound:R2_screaming.wav
+                args=data.split(":")
+                sound="sound/"+args[1];
+                call(["aplay", "/home/pi/pyroman/"+sound])
+                response = "msg:"+sound+" played"
+
             elif data.startswith("head:") :
                 #head:left:20
                 args=data.split(":")
@@ -185,6 +197,13 @@ def handleRequest(data):
                 response = "msg:Not supported"
             print data+"="+response
             return response
+
+
+def get_ip_address():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    return s.getsockname()[0]
+
 # Main loop
 def main():
     print("==============================")
@@ -252,7 +271,8 @@ def main():
 
             response=handleRequest(data)
 
-            
+            print "sdsdSent back [%s]" % response
+
             client_sock.send(response)
             print "Sent back [%s]" % response
 

@@ -5,15 +5,27 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.ValueCallback;
+import android.webkit.WebBackForwardList;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 
 import java.io.*;
 import java.io.InputStream;
@@ -28,26 +40,10 @@ public class MainActivity extends Activity {
     BluetoothSocket mmSocket;
     BluetoothDevice mmDevice = null;
     int readBufferPosition = 0;
+    // https://stackoverflow.com/questions/42678488/streaming-live-video-from-raspberry-pi-to-my-android-app-but-getting-security-ex
+    String vidAddress = "http://192.168.0.14:8081/";
+    private WebView webView;
 
-
-    public void sendBluetoothMessage(String msg2send) {
-        // same as in Pyroman/scripts/piroman-server.py >> uuid
-        UUID uuid = UUID.fromString("7be1fcb3-5776-42fb-91fd-2ee7b5bbb86d"); //Standard SerialPortService ID
-        try {
-            mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
-            if (!mmSocket.isConnected()) {
-                mmSocket.connect();
-            }
-
-            OutputStream mmOutputStream = mmSocket.getOutputStream();
-            mmOutputStream.write(msg2send.getBytes());
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +51,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         final Handler handler = new Handler();
+
+        webView = (WebView) findViewById(R.id.webView);
+        webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        webView.getSettings().setJavaScriptEnabled(true);
 
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -77,14 +77,6 @@ public class MainActivity extends Activity {
         final Button headLeft = (Button) findViewById(R.id.headLeft);
         headLeft.setOnClickListener(new SendMessageClickHandler("head:left:" + delta));
 
-        final Button meteo = (Button) findViewById(R.id.meteo);
-        meteo.setOnClickListener(new SendMessageClickHandler("action:meteo"));
-
-        final Button coucou = (Button) findViewById(R.id.coucou);
-        coucou.setOnClickListener(new SendMessageClickHandler("action:coucou"));
-
-        final Button lightOff = (Button) findViewById(R.id.lightOff);
-        lightOff.setOnClickListener(new SendMessageClickHandler("lcd:off"));
 
         final EditText lcd1 = (EditText) findViewById(R.id.lcd1);
         lcd1.addTextChangedListener(new LCDTextWatcher(0));
@@ -93,6 +85,35 @@ public class MainActivity extends Activity {
         lcd2.addTextChangedListener(new LCDTextWatcher(1));
         lcd2.setOnFocusChangeListener(new LCDFocusChangeListener(1));
 
+
+        //actions
+
+        Button meteo = addAction("Meteo", "action:meteo");
+
+        //default focus
+        meteo.setFocusable(true);
+        meteo.setFocusableInTouchMode(true);///add this line
+        meteo.requestFocus();
+
+        Button lightOff = addAction("Lumière", "lcd:off");
+
+        Button coucou = addAction("Coucou", "action:coucou");
+
+        Button R2_screaming = addSound("Cri de R2D2", "sound:R2_screaming.wav");
+        Button Chewbacca_Sound_10 = addSound("Chewbacca", "sound:Chewbacca_Sound_10.wav");
+
+/*
+        Button meteo = addAction("Meteo", "action:meteo");
+
+        final Button meteo = (Button) findViewById(R.id.meteo);
+        meteo.setOnClickListener(new SendMessageClickHandler("action:meteo"));
+
+        final Button coucou = (Button) findViewById(R.id.coucou);
+        coucou.setOnClickListener(new SendMessageClickHandler("action:coucou"));
+
+        final Button lightOff = (Button) findViewById(R.id.lightOff);
+        lightOff.setOnClickListener(new SendMessageClickHandler("lcd:off"));
+*/
 
         // end light off button handler
         if (mBluetoothAdapter != null) {
@@ -108,10 +129,10 @@ public class MainActivity extends Activity {
 
             {
                 for (BluetoothDevice device : pairedDevices) {
-                    Log.e("Piroid", "Device " + device.getName());
+                    Log.i("Piroid", "Device " + device.getName());
                     if (device.getName().equalsIgnoreCase("piroman") || device.getName().equalsIgnoreCase("raspberrypi")) //Note, you will need to change this to match the name of your device
                     {
-                        Log.e("PiRoMan", "Found bluetoooth device " + device.getName());
+                        Log.i("PiRoMan", "Found bluetoooth device " + device.getName());
                         mmDevice = device;
                         break;
                     }
@@ -119,15 +140,113 @@ public class MainActivity extends Activity {
             }
         }
 
+        if (mmDevice == null) {
+
+        } else {
+            //https://stackoverflow.com/questions/11430182/android-see-images-of-ip-camera-with-webview-on-android-2-2
+
+            loadVideoUrl();
+            webView.setOnTouchListener(new View.OnTouchListener(){
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    loadVideoUrl();
+                    return true;
+                }
+            });
+            //webView.loadUrl(vidAddress);
+
+        }
+    }
+
+    private void loadVideoUrl() {
+        (new Thread(new WorkerThread("getcameraurl", new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                vidAddress = value;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String html = "<!DOCTYPE html>\n" +
+                                "<html>\n" +
+                                "<head>\n" +
+                                "\t<title></title>\n" +
+                                "</head>\n" +
+                                "<body>\n" +
+                                "<center><img width='100%' src=\"" + vidAddress + "\"></center>\n" +
+                                "</body>\n" +
+                                "</html>";
+                        String mime = "text/html";
+                        String encoding = "utf-8";
+                        webView.loadDataWithBaseURL(null, html, mime, encoding, null);
+                    }
+                });
+
+
+            }
+        }))).start();
+    }
+
+    @NonNull
+    private Button addAction(String text, String msg) {
+        final LinearLayout row = (LinearLayout) findViewById(R.id.actionsView);
+        return addButton(text, msg, row);
+    }
+
+    @NonNull
+    private Button addSound(String text, String msg) {
+        final LinearLayout row = (LinearLayout) findViewById(R.id.soundsView);
+        return addButton(text, msg, row);
+    }
+
+    @NonNull
+    private Button addButton(String text, String msg, LinearLayout row) {
+        Button btnTag = new Button(this);
+        btnTag.setBackgroundResource(R.drawable.button2);
+        btnTag.setTextColor(getResources().getColor(R.color.colorWhite));
+        btnTag.setPadding(6, 4, 6, 4);
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins(6, 2, 6, 2);
+        btnTag.setLayoutParams(params);
+        btnTag.setText(text);
+        btnTag.setOnClickListener(new SendMessageClickHandler(msg));
+        row.addView(btnTag);
+        return btnTag;
+    }
+
+    public void sendBluetoothMessage(String msg2send) {
+        // same as in Pyroman/scripts/piroman-server.py >> uuid
+        UUID uuid = UUID.fromString("7be1fcb3-5776-42fb-91fd-2ee7b5bbb86d"); //Standard SerialPortService ID
+        try {
+            System.out.println("send " + msg2send);
+            mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
+            if (!mmSocket.isConnected()) {
+                mmSocket.connect();
+            }
+
+            OutputStream mmOutputStream = mmSocket.getOutputStream();
+            mmOutputStream.write(msg2send.getBytes());
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
     final class WorkerThread implements Runnable {
 
+        ValueCallback<String> callback;
         private String btMsg;
 
         public WorkerThread(String msg) {
             btMsg = msg;
+        }
+
+        public WorkerThread(String msg, ValueCallback<String> callback) {
+            btMsg = msg;
+            this.callback = callback;
         }
 
         public void run() {
@@ -144,12 +263,12 @@ public class MainActivity extends Activity {
                     final InputStream mmInputStream;
                     mmInputStream = mmSocket.getInputStream();
                     bytesAvailable = mmInputStream.available();
-                    if (bytesAvailable > 0) {
+                    byte[] buffer = new byte[1024];
+                    int bytes = mmInputStream.read(buffer);
+                    String readMessage = new String(buffer, 0, bytes);
 
-                        byte[] packetBytes = new byte[bytesAvailable];
-                        mmInputStream.read(packetBytes);
-                        // todo use these bytes to show UX answer to user, handle error
-                    }
+                    if (callback != null)
+                        callback.onReceiveValue(readMessage);
 
 
                     mmSocket.close();

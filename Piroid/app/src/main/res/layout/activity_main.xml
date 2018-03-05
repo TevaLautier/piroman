@@ -1,173 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    tools:context="piroid.teva.org.piroid.org.teva.piroid.MainActivity">
+    android:layout_height="match_parent">
 
-    <com.google.android.flexbox.FlexboxLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:flexWrap="nowrap"
-        app:alignItems="center"
-        app:alignContent="stretch" >
-        <Button
-            android:id="@+id/headLeft"
-            style="@style/App_Button"
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="piroid.teva.org.piroid.org.teva.piroid.MainActivity">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="&#x21B6;"
-            android:textColor="#FFFFFF"
-            app:layout_flexBasisPercent="30%"
-            />
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            app:layout_flexBasisPercent="40%"
-            >
-            <EditText
+            app:alignContent="stretch"
+            app:alignItems="center"
+            app:flexWrap="nowrap">
+
+            <Button
+                android:id="@+id/headLeft"
+                style="@style/App_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&#x21B6;"
+                android:textColor="#FFFFFF"
+                app:layout_flexBasisPercent="30%" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_flexBasisPercent="40%">
+
+                <!--EditText
+                    android:layout_width="70dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:text="0" /-->
+
+                <EditText
+                    android:id="@+id/lcd1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ligne 1"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:text="" />
+
+                <EditText
+                    android:id="@+id/lcd2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ligne 2"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/headRight"
+                style="@style/App_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&#x21B7;"
+                app:layout_flexBasisPercent="30%" />
+        </com.google.android.flexbox.FlexboxLayout>
+
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            app:alignContent="stretch"
+            app:alignItems="stretch"
+            app:flexWrap="nowrap">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_flexBasisPercent="20%">
+
+                <Button
+                    android:id="@+id/leftUp"
+                    style="@style/App_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#x25B2;" />
+
+                <!--EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="Bras gauche"
+                    android:inputType="number"
+                    android:text="0" /-->
+
+                <Button
+                    android:id="@+id/leftDown"
+                    style="@style/App_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#x25BC;" />
+            </LinearLayout>
+
+            <WebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_flexBasisPercent="60%" />
+
+
+            <LinearLayout
                 android:layout_width="70dip"
-                android:gravity="center"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="0"/>
-            <EditText
-                android:id="@+id/lcd1"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_flexBasisPercent="20%">
+
+                <Button
+                    android:id="@+id/rightUp"
+                    style="@style/App_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#x25B2;" />
+
+                <!--EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="Bras droit"
+                    android:inputType="number"
+                    android:text="0" /-->
+
+                <Button
+                    android:id="@+id/rightDown"
+                    style="@style/App_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#x25BC;" />
+            </LinearLayout>
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actions:" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            >
+
+            <LinearLayout
+                android:id="@+id/actionsView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+                <!--Button
+                    android:id="@+id/meteo"
+                    style="@style/App_Button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Meteo" />
+
+                <Button
+                    android:id="@+id/lightOff"
+                    style="@style/App_Button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Light off" />
+
+                <Button
+                    android:id="@+id/coucou"
+                    style="@style/App_Button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Coucou" /-->
+
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sons" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <LinearLayout
+                android:id="@+id/soundsView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ligne 1"
-                android:text=""
-                android:maxLines="1"
-                android:inputType="text"
-                />
-            <EditText
-                android:id="@+id/lcd2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ligne 2"
-                android:text=""
-                android:maxLines="1"
-                android:inputType="text"
-                />
-
-        </LinearLayout>
-        <Button
-            android:id="@+id/headRight"
-            style="@style/App_Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="&#x21B7;"
-            app:layout_flexBasisPercent="30%"
-            />
-    </com.google.android.flexbox.FlexboxLayout>
-
-
-    <com.google.android.flexbox.FlexboxLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:flexWrap="nowrap"
-        app:alignItems="stretch"
-        app:alignContent="stretch" >
-        <LinearLayout
-            android:layout_width="70dip"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            app:layout_flexBasisPercent="20%"
-            >
-            <Button
-                android:id="@+id/leftUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/App_Button"
-                android:text="&#x25B2;"/>
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Bras gauche"
-                android:inputType="number"
-                android:gravity="center"
-                android:text="0"/>
-            <Button
-                android:id="@+id/leftDown"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/App_Button"
-                android:text="&#x25BC;"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            app:layout_flexBasisPercent="60%"
-            >
-            <Button
-                android:id="@+id/meteo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Meteo"
-                style="@style/App_Button2"
-                />
-            <Button
-                android:id="@+id/lightOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Light off"
-                style="@style/App_Button2"
-                />
-            <Button
-                android:id="@+id/coucou"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Coucou"
-                style="@style/App_Button2"
-                />
-
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="70dip"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            app:layout_flexBasisPercent="20%"
-            >
-            <Button
-                android:id="@+id/rightUp"
-                style="@style/App_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="&#x25B2;"/>
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="0"
-                android:hint="Bras droit"
-                android:gravity="center"/>
-            <Button
-                android:id="@+id/rightDown"
-                style="@style/App_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="&#x25BC;"/>
-        </LinearLayout>
-    </com.google.android.flexbox.FlexboxLayout>
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
 
 
 
+            </LinearLayout>
+        </HorizontalScrollView>
 
 
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

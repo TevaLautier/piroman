@@ -179,7 +179,7 @@ Edit file `/etc/default/motion` to enable motion as a daemon
 ```
 start_motion_daemon=yes
 ```
-Edit `/etc/motion/motion.conf` to change these lines, or use the provided [motion.conf](./conf/motion.conf)
+Edit `/etc/motion/motion.conf` to change these lines, or use the provided [motion.conf](./Pyroman/conf/motion.conf)
 ```
 # Start in daemon (background) mode and release terminal (default: off)
 daemon on
@@ -241,10 +241,7 @@ If you move in front of camera, you should have  AVI and JPG file generated in `
 
 ### Add Pyroman scripts
 
-TODO 
-
-With your file explorer, go into \\piroman\pyroman. Copy all files from [Pyroman/script](./Pyroman/script) onto this shared folder.
-
+With your file explorer, go into \\\\piroman\pyroman. Copy all files from [Pyroman/script](./Pyroman/script) onto this shared folder.
 
 
 ### Launch Pyroman server
@@ -257,7 +254,7 @@ You can test your android application now, if you already have it. But we need p
 
 ### Install Piroman as a service
 
-To [install it as a service](http://www.diegoacuna.me/how-to-run-a-script-as-a-service-in-raspberry-pi-raspbian-jessie/), copy [piroman.service](./conf/piroman.service) into your home folder, and run command :
+To [install it as a service](http://www.diegoacuna.me/how-to-run-a-script-as-a-service-in-raspberry-pi-raspbian-jessie/), copy [piroman.service](./Pyroman/conf/piroman.service) into your home folder, and run command :
 ```
 sudo cp ~/piroman.service /lib/systemd/system
 sudo chmod 644 /lib/systemd/system/piroman.service
@@ -277,7 +274,7 @@ sudo systemctl status piroman.service
 Piroïd is the android application that connect to pyroman-server over bluetooth.
 It is not available yet on Play store. 
 
-Open the [project](./Piroid) in Android studio project, and simply launch it.
+Open the [project](./Piroid) in Android studio project, and simply launch the main activity.
 
 You need to connect a remote device (your phone) to be able to use bluetooth.
 
