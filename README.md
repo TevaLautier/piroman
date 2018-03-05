@@ -2,16 +2,16 @@
 
 Raspberry **Pi** **ro**bot for Weather and Video Surveillance :
 
-<img src="piroman.jpg" alt="Image" style="width: 200px;"/>
+<img src="images/piroman.jpg" alt="Image" style="width: 200px;"/>
 
-This project allows to create a raspberry pi robot controlled by an android application (Piroid), over bluetooth, with python scripts (Pyroman).
-This robot can gives information on weather (temperature, pression, humidity), and is a also a camera surveillance 
+This project allows to create a raspberry pi robot controlled by an android application ([Piroid](#piroid)), over bluetooth, with python scripts ([Pyroman](#pyroman)).
+This robot can gives information on weather (temperature, pression, humidity), and is a also a surveillance camera.
 
-I have made this project to learn linux, raspberry, python, robotic, electronic, android, bluetooth. 
+I have made this project to learn python, linux, raspberry, robotic, electronic, android, bluetooth...
 
 It can also be transformed into a [Retropi](https://retropie.org.uk/) console. You just need to replace its SD card with a Retropie one, and connect joysticks.
 
-<img src="piroman-bomberman.jpg" alt="Image" style="width: 300px;"/>.
+<img src="images/piroman-bomberman.jpg" alt="Image" style="width: 300px;"/>.
 
 ## Table of Contents
 
@@ -46,7 +46,7 @@ To build the body, the head, the arms of your robots, you can use cardboard, bal
 On your raspberry, you need to :
 - [Install latest Raspbian OS](https://www.raspberrypi.org/downloads/raspbian/)
 - [Configure Wifi](http://weworkweplay.com/play/automatically-connect-a-raspberry-pi-to-a-wifi-network/)
-- [enable SSH](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md) on your Raspberry pi.
+- [enable SSH](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md)
  
 *Tips:
 To enable SSH and auto configure Wifi, write raspbian OS image onto your SD card, and in `boot` disk,  
@@ -55,6 +55,9 @@ add an empty file named `ssh` and a file `wpa_suppliant.conf` (cf [Raspbian Stre
 ## GPIO configuration
 
 TODO
+Here is the electronic assembly :
+
+<img src="images/gpio.jpg" alt="Image" style="width: 300px;"/>.
 
 
 ## Pyroman
