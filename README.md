@@ -1,13 +1,31 @@
-# Piroman : Raspberry *Pi* *ro*bot for Weather and Video Surveillance 
+# Piroman
 
+Raspberry *Pi* *ro*bot for Weather and Video Surveillance :
 <img src="piroman.jpg" alt="Image" style="width: 200px;"/>
-This project allows to create a raspberry pi robot controlled by an android application, over bluetooth.
+
+This project allows to create a raspberry pi robot controlled by an android application (Piroid), over bluetooth, with python scripts (Pyroman).
 This robot can gives information on weather (temperature, pression, humidity), and is a also a camera surveillance 
 
 
 It can also be transformed into a [Retropi](https://retropie.org.uk/) console. You just need to replace its SD card with a Retropie one, and connect joysticks.
 
 <img src="piroman-bomberman.jpg" alt="Image" style="width: 300px;"/>.
+
+## Table of Contents
+
+
+   * [Piroman](#piroman)
+      * [Prerequisites](#prerequisites)
+      * [GPIO configuration](#gpio-configuration)
+      * [Pyroman](#pyroman)
+         * [Configure shared folder](#configure-shared-folder)
+         * [Change computer name](#change-computer-name)
+         * [Configure bluetooth](#configure-bluetooth)
+         * [Install and configure Motion](#install-and-configure-motion)
+         * [Add Pyroman scripts](#add-pyroman-scripts)
+         * [Pyroman server](#pyroman-server)
+      * [Piroid](#piroid)
+      * [References](#references)
 
 
 ## Prerequisites
@@ -32,7 +50,12 @@ On your raspberry, you need to :
 To enable SSH and auto configure Wifi, write raspbian OS image onto your SD card, and in `boot` disk,  
 add an empty file named `ssh` and a file `wpa_suppliant.conf` (cf [Raspbian Stretch Headless Setup Procedure](https://www.raspberrypi.org/forums/viewtopic.php?t=191252))
 
-## Pyroman : Python scripts for Piroman
+## GPIO configuration
+
+TODO
+
+
+## Pyroman
 
 ### Configure shared folder
 
@@ -115,7 +138,7 @@ sudo systemctl restart bluetooth
 
 
 
-### Motion
+### Install and configure Motion
 
 Motion is a tool to detect motion with camera. We need to [install it](https://raspbian-france.fr/video-surveillance-raspberry-pi-camera/) :
 ```
@@ -178,6 +201,7 @@ Go into `Interfacing Options->Camera` and enable it
 To allow motion to write log, videos, images, we need to add user motion to pi group, and change some file rights
 ```
 sudo adduser motion pi
+mkdir log
 chmod -R g+rw ~/pyroman/log
 mkdir camera
 chmod -R g+rw ~/pyroman/camera
@@ -193,6 +217,8 @@ If you move in front of camera, you should have  AVI and JPG file generated in ~
 
 ### Add Pyroman scripts
 
+TODO 
+
 With your file explorer go into \\piroman\pyroman. Copy all files from [Pyroman/script](./Pyroman/script) onto this shared folder
 
 
@@ -202,8 +228,21 @@ sudo raspi-config
 ```
 Go into `Interfacing Options->I2C` and enable it
 
+### Pyroman server
 
+You can launch pyroman server by using 
+```
+sudo python pyroman-server.py
+```
+To install it as a service :
 
+TODO
+
+## Piroid
+
+Piroïd is the android application that connect to pyroman-server over bluetooth.
+Open the [project](./Piroid) in Android studio project, and launch it.
+You need to connect a remote device (your phone) to be able to use bluetooth.
 
 ## References
 - Android Linux / Raspberry Pi Bluetooth communication : http://blog.davidvassallo.me/2014/05/11/android-linux-raspberry-pi-bluetooth-communication/
