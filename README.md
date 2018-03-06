@@ -7,13 +7,14 @@ Raspberry **Pi** **ro**bot for Weather and Video Surveillance :
 This project allows to create a raspberry pi robot controlled by an android application ([Piroid](#piroid)), over bluetooth, with python scripts ([Pyroman](#pyroman)).
 This robot can gives information on weather (temperature, pression, humidity), and is a also a surveillance camera.
 
+You can see it in action on [Youtube](https://youtu.be/cl1XTbbh6Po) (french).
+
 I have made this project to learn python, linux, raspberry, robotic, electronic, android, bluetooth...
 
 It can also be transformed into a [Retropi](https://retropie.org.uk/) console. You just need to replace its SD card with a Retropie one, and connect joysticks.
 
 <img src="images/piroman-bomberman.jpg" alt="Image" style="width: 300px;"/>.
 
-You can see it in action (french) on [Youtube](https://youtu.be/cl1XTbbh6Po).
 
 ## Table of Contents
 
