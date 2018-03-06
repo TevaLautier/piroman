@@ -13,10 +13,11 @@ It can also be transformed into a [Retropi](https://retropie.org.uk/) console. Y
 
 <img src="images/piroman-bomberman.jpg" alt="Image" style="width: 300px;"/>.
 
+You can see it in action (french) on [Youtube](https://youtu.be/cl1XTbbh6Po).
+
 ## Table of Contents
 
    * [Piroman](#piroman)
-      * [Table of Contents](#table-of-contents)
       * [Prerequisites](#prerequisites)
       * [GPIO](#gpio)
          * [Configuration](#configuration)
